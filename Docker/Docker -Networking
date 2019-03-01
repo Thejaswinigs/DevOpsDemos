@@ -1,0 +1,82 @@
+docker network
+
+Description
+
+Manage networks
+
+docker network COMMAND
+
+docker network connect	------Connect a container to a network
+docker network create	---------Create a network
+docker network disconnect--------	Disconnect a container from a network
+docker network inspect	-----------Display detailed information on one or more networks
+docker network ls	-------------List networks
+docker network prune	----------Remove all unused networks
+docker network rm	---------Remove one or more networks
+
+In terms of Docker, a bridge network uses a software bridge which allows containers connected to the same bridge network to communicate, while providing isolation from containers which are not connected to that bridge network. The Docker bridge driver automatically installs rules in the host machine so that containers on different bridge networks cannot communicate directly with each other.
+
+Bridge networks apply to containers running on the same Docker daemon host. For communication among containers running on different Docker daemon hosts, you can either manage routing at the OS level, or you can use an overlay network.
+
+When you start Docker, a default bridge network (also called bridge) is created automatically, and newly-started containers connect to it unless otherwise specified. You can also create user-defined custom bridge networks. User-defined bridge networks are superior to the default bridge network.
+
+Differences between user-defined bridges and the default bridge
+ by using user defined bridge -- container can talk to each other by their container names and by ip address ,, if you use default bridge containers can talk to each other by their container ips only
+ 
+-----------
+Manage a user-defined bridge
+
+[root@ip-172-31-33-248 ~]# docker network create my-net
+df40be400d3738a3019b4a0a18d30265a05a027576815562a65cd9ead8eb52ff
+[root@ip-172-31-33-248 ~]# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+22caf0bfbb6a        bridge              bridge              local
+bcc880706150        host                host                local
+df40be400d37        my-net              bridge              local
+3a0af96e6018        none                null                local
+[root@ip-172-31-33-248 ~]# docker run -itd --name vij123 --network=my-net centos
+446320de5ed734e3597bef6c66beac7c272f8ecb7b0ef5edaf874d9b640d0bb2
+[root@ip-172-31-33-248 ~]# docker inspect my-net
+[
+    {
+        "Name": "my-net",
+        "Id": "df40be400d3738a3019b4a0a18d30265a05a027576815562a65cd9ead8eb52ff",
+        "Created": "2019-03-01T05:29:25.022760197Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "446320de5ed734e3597bef6c66beac7c272f8ecb7b0ef5edaf874d9b640d0bb2": {
+                "Name": "vij123",
+                "EndpointID": "d1384b47a49a04e3fe1572207a04523faf4330b5cb2d9563a7b3a90d1c5764d2",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+
+--------------
+Disconnect a container from a user-defined bridge
+$ docker network disconnect my-net my-nginx
