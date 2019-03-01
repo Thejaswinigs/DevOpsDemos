@@ -1,0 +1,16 @@
+While working with docker based microservices its very difficult to manually setup hundreds of microservice,
+so docker compose is a tool using which we can describe about microservices in YAML file and quickly setup complete environment
+with a single command
+------------------
+Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. 
+Then, with a single command, you create and start all the services from your configuration.
+----------------------
+Install Compose on Linux systems
+wget https://github.com/vijaybirru/docker-compose.git
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+docker-compose up -d
+
+
